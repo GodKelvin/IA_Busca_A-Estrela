@@ -5,15 +5,16 @@
 def read_grid(path_file):
 	grid = []
 	with open(path_file) as file:
+		#Lendo todas as linhas do arquivo de uma vez
 		lines = file.readlines()
 		for line in lines:
+			#Removendo caracteres especiais(\n) e separando por espaco em branco
 			line = line.strip().split(' ')
-			#Convertendo os valores para inteiro
+			#Convertendo os valores da linha para inteiro
 			for i in range(len(line)):
 				line[i] = int(line[i])
 			grid.append(line)
 
-	print_grid(grid)
 	return grid
 
 #Baseado na distancia de mannhatan
@@ -29,7 +30,7 @@ def get_distance(p, q):
 #Recebe o grid o objetivo
 #Calcula a distancia de todos os pontos ate o objetivo
 #Retorna a matriz com as heuristicas
-def new_calc_heuristic(grid, end):
+def calc_heuristic(grid, end):
 	heuristic = []
 	for i in range(len(grid)):
 		j = 0
@@ -40,44 +41,22 @@ def new_calc_heuristic(grid, end):
 		heuristic.append(new_line)
 
 	return heuristic
-#Calcular o custo com base no grid(Passar tamanho tambem?)
-def calc_heuristic():
-	heuristic =	[[9, 8, 7, 6, 5, 4],
-			  	 [8, 7, 6, 5, 4, 3],
-				 [7, 6, 5, 4, 3, 2],
-				 [6, 5, 4, 3, 2, 1],
-				 [5, 4, 3, 2, 1, 0]]
-
-	# heuristic =	[[2, 1, 0, 1, 2, 3],
-	# 		  	 [3, 2, 1, 2, 3, 4],
-	# 			 [4, 3, 2, 3, 4, 5],
-	# 			 [5, 4, 3, 4, 5, 6],
-	# 			 [6, 5, 4, 5, 6, 7]]
-
-
-	return heuristic
-
 
 def print_grid(grid):
 	for line in grid:
 		print(line)
-
-
-
+	print("\n")
 # grid, pos_inicial e destino
-#def search(grid, init, goal):
-def search():
+def search(grid, heuristic, init, goal):
+#def search():
 
-	grid = read_grid()
-	#print_grid(grid)
+	#grid = read_grid()
 
 	#Definindo os pontos de partida, destino e o custo
-	init = [0, 0]
-	goal = [4, 5] #Ou seja, os extremos do grid
-	#goal = [0, 2] #Ou seja, os extremos do grid
-	#goal = [len(grid) - 1, len(grid[0]) - 1] #Ou seja, os extremos do grid
-	print("Objetivo: ")
-	print(goal[0], goal[1])
+	# init = [0, 0]
+	# goal = [4, 5] #Ou seja, os extremos do grid
+	# print("Objetivo: ")
+	# print(goal[0], goal[1])
 	#print(len(grid) - 1, len(grid[0]) - 1)
 	cost = 1
 
@@ -87,7 +66,6 @@ def search():
 			  [1,  0], #Baixo
 			  [0,  1]] #Direita
 
-	delta_name = ['^', '<', 'v', '>']
 
 	############################################
 
@@ -107,7 +85,7 @@ def search():
 	print("\nCaminho Limpo:")
 	print_grid(path)
 
-	heuristic = calc_heuristic()
+	#heuristic = calc_heuristic()
 	print("\nHeuristica:")
 	print_grid(heuristic)
 	print("\n")
@@ -120,7 +98,6 @@ def search():
 	#Cria o vetor para guardar os componentes
 	open = [[f, g, x, y]]
 	
-
 	#Criacao das flags para checar se ja encontrou o melhor caminho,
 	#ou se ainda existem nos para expandir
 	found = False
@@ -134,7 +111,7 @@ def search():
 		#Se nao houve nos para expandir, nao encontrou o melhor caminho, fim
 		if(len(open) == 0):
 			resign = True
-			print("FALHOU")
+			print(">>>CAMINHO NAO ENCONTRADO OU BLOQUEADO<<<\n\n")
 			return 'fail'
 		
 		#Caso ainda tenha nos ha serem expandidos
@@ -175,14 +152,19 @@ def search():
 							g2 = g + cost					#'g' atual + novo custo da operacao
 							f2 = g2 + heuristic[x2][y2]		#'f' recebe novo custo da operacao
 							open.append([f2, g2, x2, y2])	# Salva os novos valores calculados
+							#ORIGINAL
 							closed[x2][y2] = 1				# Sinaliza que o no ja foi expandido
+							#closed[x][y] = 1
 							action[x][y] = i				# Sinaliza qual foi a acao tomada na posicao
+							#print("I:", i)
 	
 	# x = 0
 	# y = 0
 	x = init[0]
 	y = init[1]
 
+	print("CLOSED: ")
+	print_grid(closed)
 	
 	print("Expand:")
 	print_grid(expand)
@@ -195,26 +177,43 @@ def search():
 	print_grid(action)
 	print("\n")
 
+	# delta = [[-1, 0], #Cima
+	# 		  [0, -1], #Esquerda
+	# 		  [1,  0], #Baixo
+	# 		  [0,  1]] #Direita
+
+	delta_name = ['^', '<', 'v', '>']
+	path[goal[0]][goal[1]] = '*'
 	while(x != goal[0] or y != goal[1]):
-		print(x, y)
+		print(x, y, action[x][y])
 		x2 = x + delta[action[x][y]][0]
 		y2 = y + delta[action[x][y]][1]
 
 		path[x][y] = delta_name[action[x][y]]
 		x = x2
 		y = y2
-	path[goal[0]][goal[1]] = '*'
+		print_grid(path)
+
+	
 
 	print_grid(path)
-	
+	print("OPA")
+	#return path
 	return expand
 
 
 
 
 def main():
-	path_grid = "grids/grid_1.txt"
+	path_grid = "grids/grid_2.txt"
 	grid = read_grid(path_grid)
-	#print_grid(new_calc_heuristic(grid, [0,2]))
+	start = [0,0]
+	end = [0,2]
+	heuristic = calc_heuristic(grid, end)
+	best_path = search(grid, heuristic, start, end)
 
+	#print_grid(grid)
+	#print_grid(heuristic)
+	#print_grid(best_path)
+	#print_grid(path)
 main()
