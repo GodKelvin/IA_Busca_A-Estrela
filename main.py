@@ -9,6 +9,30 @@ def read_grid():
 	return grid
 
 
+#Baseado na distancia de mannhatan
+#Formula: |x1 - x2| + |y1 - y2|
+#Ou para N dimensoes: SUM(1~N)|pi - qi|
+def get_distance(p, q):
+	distance = 0
+	for p_i, q_i in zip(p, q):
+		distance += abs(p_i - q_i)
+	
+	return distance
+
+#Recebe o grid o objetivo
+#Calcula a distancia de todos os pontos ate o objetivo
+#Retorna a matriz com as heuristicas
+def new_calc_heuristic(grid, end):
+	heuristic = []
+	for i in range(len(grid)):
+		j = 0
+		new_line = []
+		for j in range(len(grid[i])):
+			new_value = get_distance([i,j], end)
+			new_line.append(new_value)
+		heuristic.append(new_line)
+
+	return heuristic
 #Calcular o custo com base no grid(Passar tamanho tambem?)
 def calc_heuristic():
 	heuristic =	[[9, 8, 7, 6, 5, 4],
@@ -22,6 +46,7 @@ def calc_heuristic():
 	# 			 [4, 3, 2, 3, 4, 5],
 	# 			 [5, 4, 3, 4, 5, 6],
 	# 			 [6, 5, 4, 5, 6, 7]]
+
 
 	return heuristic
 
@@ -42,6 +67,7 @@ def search():
 	#Definindo os pontos de partida, destino e o custo
 	init = [0, 0]
 	goal = [4, 5] #Ou seja, os extremos do grid
+	#goal = [0, 2] #Ou seja, os extremos do grid
 	#goal = [len(grid) - 1, len(grid[0]) - 1] #Ou seja, os extremos do grid
 	print("Objetivo: ")
 	print(goal[0], goal[1])
@@ -75,19 +101,18 @@ def search():
 	print_grid(path)
 
 	heuristic = calc_heuristic()
-	print("\nHeuristica: ")
+	print("\nHeuristica:")
 	print_grid(heuristic)
+	print("\n")
 	
 	x = init[0]				#Seta a posicao inicial do agente em x
 	y = init[1] 			#Seta a posicao inicial do agente em y
 	g = 0 					#Seta o valor inicial da funcao em g
 	f = g + heuristic[x][y] #Seta o valor inicial de f
-	print("\nf: %d" %(f))
 
 	#Cria o vetor para guardar os componentes
 	open = [[f, g, x, y]]
 	
-	print("Open: ", open)
 
 	#Criacao das flags para checar se ja encontrou o melhor caminho,
 	#ou se ainda existem nos para expandir
@@ -99,9 +124,6 @@ def search():
 
 	#Caso a busca nao esteja completa e ainda ha nos para expandir
 	while not found and not resign:
-		print("OPEN: ")
-		print(open)
-		print(count)
 		#Se nao houve nos para expandir, nao encontrou o melhor caminho, fim
 		if(len(open) == 0):
 			resign = True
@@ -113,13 +135,11 @@ def search():
 			#ordenar o vetor open para verificar qual o proximo ponto
 			open.sort()
 
-			print("SORT: ", open)
 			#Inverte e ordenacao
 			open.reverse()
 
 			#Recebe o valor extraido de open(melhor resultado)
 			next = open.pop()
-			print("NEXT: ", next)
 			f = next[0]
 			g = next[1]
 			x = next[2]
@@ -130,7 +150,6 @@ def search():
 
 			#Acrescido em 1 o valor de nos expandidos
 			count += 1
-			print("COUNT: ", count)
 
 			#Caso chegou ao objetivo
 			if(x == goal[0] and y == goal[1]):
@@ -158,14 +177,17 @@ def search():
 	y = init[1]
 
 	
+	print("Expand:")
 	print_grid(expand)
 	print("\n")
 
 	print("DELTA: ")
 	print_grid(delta)
 
-	print("\nACITON: ")
+	print("\nACTION: ")
 	print_grid(action)
+	print("\n")
+
 	while(x != goal[0] or y != goal[1]):
 		print(x, y)
 		x2 = x + delta[action[x][y]][0]
@@ -179,6 +201,7 @@ def search():
 	print_grid(path)
 	
 	return expand
+
 
 
 
@@ -198,7 +221,11 @@ def main():
 	# 		  [0,  1]] #Direita
 
 	# delta_name = ['^', '<', 'v', '>']
-	search()
+	#search()
+	grid = read_grid()
+	#print_grid(grid)
+	print_grid(new_calc_heuristic(grid, [0,2]))
+	#print(get_distance([1,0], [0,2]))
 
 
 
