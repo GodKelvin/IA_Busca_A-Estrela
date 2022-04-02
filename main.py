@@ -1,13 +1,20 @@
-#Carregar arquivo com o grid posteriormente
-def read_grid():
-	grid = [[0, 1, 0, 0, 0, 0],
-			[0, 1, 0, 0, 0, 0],
-			[0, 1, 0, 0, 0, 0],
-			[0, 1, 0, 0, 0, 0],
-			[0, 0, 0, 0, 1, 0]]
-	
-	return grid
 
+
+
+#Carregar arquivo com o grid posteriormente
+def read_grid(path_file):
+	grid = []
+	with open(path_file) as file:
+		lines = file.readlines()
+		for line in lines:
+			line = line.strip().split(' ')
+			#Convertendo os valores para inteiro
+			for i in range(len(line)):
+				line[i] = int(line[i])
+			grid.append(line)
+
+	print_grid(grid)
+	return grid
 
 #Baseado na distancia de mannhatan
 #Formula: |x1 - x2| + |y1 - y2|
@@ -206,27 +213,8 @@ def search():
 
 
 def main():
-	# grid = read_grid()
-	# print_grid(grid)
-
-	# #Definindo os pontos de partida, destino e o custo
-	# init = [0,0]
-	# goal = [4, 5] #Ou seja, os extremos do grid
-	# cost = 1
-
-	# #Definindo os movimentos do agente e a traducao dos mesmos
-	# delta = [[-1, 0], #Cima
-	# 		  [0, -1], #Esquerda
-	# 		  [1,  0], #Baixo
-	# 		  [0,  1]] #Direita
-
-	# delta_name = ['^', '<', 'v', '>']
-	#search()
-	grid = read_grid()
-	#print_grid(grid)
-	print_grid(new_calc_heuristic(grid, [0,2]))
-	#print(get_distance([1,0], [0,2]))
-
-
+	path_grid = "grids/grid_1.txt"
+	grid = read_grid(path_grid)
+	#print_grid(new_calc_heuristic(grid, [0,2]))
 
 main()
