@@ -72,14 +72,42 @@ def search(grid, init, goal):
 
 			#Inverte e ordenacao
 			open.reverse()
+
+			#Recebe o valor extraido de open(melhor resultado)
 			next = open.pop()
 			f = next[0]
 			g = next[1]
 			x = next[2]
 			y = next[3]
 
+			#No expandido recebe sua contagem
 			expand[x][y] = count
+
+			#Acrescido em 1 o valor de nos expandidos
 			count += 1
+
+			#Caso chegou ao objetivo
+			if(x == goal[0] and y == goal[1]):
+				found = True
+			
+			else:
+				#Movimenta o agente
+				for i in range(len(delta)):
+					x2 = x + delta[i][0]
+					y2 = y + delta[i][1]
+
+					#Verificando se a proxima posicao esta dentro do grid
+					if((x2 > 0 and x2 < len(grid)) and (y2 > 0 and y2 < len(grid[0]))):
+
+						#Verificando se o no relativo a posicao ainda nao foi expandido
+						if(closed[x2][y2] == 0 and grid[x2][y2] == 0):
+							g2 = g + cost					#'g' atual + novo custo da operacao
+							f2 = g2 + heuristic[x2][y2]		#'f' recebe novo custo da operacao
+							open.append([f2, g2, x2, y2])	# Salva os novos valores calculados
+							closed[x2][y2] = 1				# Sinaliza que o no ja foi expandido
+							action[x][y] = i				# Sinaliza qual foi a acao tomada na posicao
+	
+
 
 
 
