@@ -1,5 +1,5 @@
-
-
+# retorna o indice do menor elemento 
+import numpy
 
 #Carregar arquivo com o grid posteriormente
 def read_grid(path_file):
@@ -16,6 +16,7 @@ def read_grid(path_file):
 			grid.append(line)
 
 	return grid
+
 
 #Baseado na distancia de mannhatan
 #Formula: |x1 - x2| + |y1 - y2|
@@ -53,135 +54,77 @@ def print_grid_t(grid):
 			print("%d\t " %grid[i][j], end="")
 		print("\n")
 
-# grid, pos_inicial e destino
-def search(grid, heuristic, init, goal):
 
-	#Custo de cada acao
-	cost = 1
+# funcao que encontra os caminhos possiveis a partir de um no
+def expande_nos(pos, lista_fechada, lista_aberta, mat, xf, yf, g, custo):
+	if pos[0] >= 0 and pos[0] < 15 and pos[1] >= 0 and pos[1] < 15 and mat[pos[0]][pos[1]] != 1:
+			if pos not in lista_fechada and pos not in lista_aberta:
+				h = abs(xf - pos[0]) + abs(yf - pos[1])
+				#h = heuristic[pos[0]][pos[1]]
+				g = g + 1
+				lista_aberta.append(pos)
+				custo.append(g+h)
 
-	#Definindo os movimentos do agente e a traducao dos mesmos
-	delta = [[-1, 0], #Cima
-			  [0, -1], #Esquerda
-			  [1,  0], #Baixo
-			  [0,  1]] #Direita
 
-	#Informacao dos nos ou posicoes que foram expandidos ou nao
-	closed = [[0 for row in range(len(grid[0]))] for col in range(len(grid))]
-	closed[init[0]][init[1]] = 1
+def print_grid(grid):
+	for line in grid:
+		print(line)
+	print("\n")
 
-	#Contem a ordem crescente com que os nos foram expandidos
-	expand = [[-1 for row in range(len(grid[0]))] for col in range(len(grid))]
+def heuristica(mat, xi, yi, xf, yf):
+	g = 0
+	h = (xf - xi) + (yf - yi)
+	destino = [xf, yf]
 
-	#Receberam os movimentos realizados ate chegar ao ponto de destino
-	action = [[-1 for row in range(len(grid[0]))] for col in range(len(grid))]
-
-	#Ira desenhar a tragetoria do agente
-	path = [[' ' for row in range(len(grid[0]))] for col in range(len(grid))]
+	# matriz que direciona os possiveis caminhos do ponto atual
+	delta = [[-1, 0],   # cima
+			 [0, -1],   # esquerda
+			 [1, 0],    # baixo
+			 [0, 1]]    # direita
 	
-	x = init[0]				#Seta a posicao inicial do agente em x
-	y = init[1] 			#Seta a posicao inicial do agente em y
-	g = 0 					#Seta o valor inicial da funcao em g
-	f = g + heuristic[x][y] #Seta o valor inicial de f
-
-	#Cria o vetor para guardar os componentes
-	open = [[f, g, x, y]]
+	caminho = []
+	atual = [xi, yi]
+	l_fechada = []
+	l_aberta = [[xi, yi]]
+	custo = [[g+h]]
 	
-	#Criacao das flags para checar se ja encontrou o melhor caminho,
-	#ou se ainda existem nos para expandir
-	found = False
-	resign = False
-
-	#Contagem de nos expandidos
-	count = 0
-
-	#Caso a busca nao esteja completa e ainda ha nos para expandir
-	while not found and not resign:
-		#Se nao houve nos para expandir, nao encontrou o melhor caminho, fim
-		if(len(open) == 0):
-			resign = True
-			print(">>>CAMINHO NAO ENCONTRADO OU BLOQUEADO<<<\n\n")
-			return 'fail'
+	while len(l_aberta) > 0 and atual != destino:	
+		menor_indice = numpy.argmin(custo)
+		atual = l_aberta[menor_indice]
+		del l_aberta[menor_indice]
+		del custo[menor_indice]
+		l_fechada.append(atual)
 		
-		#Caso ainda tenha nos ha serem expandidos
-		else:
-			#ordenar o vetor open para verificar qual o proximo ponto
-			open.sort()
+		cima = [atual[0]+delta[0][0], atual[1]+delta[0][1]]
+		esquerda = [atual[0]+delta[1][0], atual[1]+delta[1][1]]
+		baixo = [atual[0]+delta[2][0], atual[1]+delta[2][1]]
+		direita = [atual[0]+delta[3][0], atual[1]+delta[3][1]]
 
-			#Inverte a ordenacao
-			open.reverse()
+		expande_nos(cima, l_fechada, l_aberta, mat, xf, yf, g, custo)	
+		expande_nos(esquerda, l_fechada, l_aberta, mat, xf, yf, g, custo)
+		expande_nos(baixo, l_fechada, l_aberta, mat, xf, yf, g, custo)
+		expande_nos(direita, l_fechada, l_aberta, mat, xf, yf, g, custo)
+		
+		caminho.append(atual)
 
-			#Recebe o valor extraido de open(melhor resultado)
-			next = open.pop()
-
-			f = next[0]
-			g = next[1]
-			x = next[2]
-			y = next[3]
-
-			#No expandido recebe sua contagem
-			expand[x][y] = count
-
-			#Acrescido em 1 o valor de nos expandidos
-			count += 1
-
-			#Caso chegou ao objetivo
-			if(x == goal[0] and y == goal[1]):
-				found = True
-			else:
-				#Movimenta o agente
-				for i in range(len(delta)):
-					x2 = x + delta[i][0]
-					y2 = y + delta[i][1]
-
-					#Verificando se a proxima posicao esta dentro do grid
-					if x2 >= 0 and x2 < len(grid) and y2 >= 0 and y2 < len(grid[0]) and grid[x2][y2] != 1:
-
-						#Verificando se o no relativo a posicao ainda nao foi expandido
-						if(closed[x2][y2] == 0 and grid[x2][y2] == 0):
-							g2 = g + cost					#'g' atual + novo custo da operacao
-							f2 = g2 + heuristic[x2][y2]		#'f' recebe novo custo da operacao
-							open.append([f2, g2, x2, y2])	# Salva os novos valores calculados
-							#ORIGINAL
-							closed[x2][y2] = 1				# Sinaliza que o no ja foi expandido
-							#closed[x][y] = 1
-							action[x][y] = i				# Sinaliza qual foi a acao tomada na posicao
+	for coord in caminho:
+		mat[coord[0]][coord[1]] = 9
 	
+	print_grid(mat)
 
-	# delta = [[-1, 0], #Cima
-	# 		  [0, -1], #Esquerda
-	# 		  [1,  0], #Baixo
-	# 		  [0,  1]] #Direita
+	print(caminho)
 
-	# x = 0
-	# y = 0
-	x = init[0]
-	y = init[1]
 
-	delta_name = ['^', '<', 'v', '>']
-	path[goal[0]][goal[1]] = '*'
-	while(x != goal[0] or y != goal[1]):
-		x2 = x + delta[action[x][y]][0]
-		y2 = y + delta[action[x][y]][1]
+path_grid = "grids/grid_1.txt"
+grid = read_grid(path_grid)
+start = [13,13]
+end = [0,0]
+heuristic = calc_heuristic(grid, end)
 
-		path[x][y] = delta_name[action[x][y]]
-		x = x2
-		y = y2
+def main():	
+	print_grid(heuristic)
+	heuristica(grid, start[0], start[1], end[0], end[1])
+
+
 	
-	print_grid(action)
-	print_grid(path)
-	print(expand)
-	print_grid(action)
-	return expand
-
-
-
-
-def main():
-	path_grid = "grids/grid_1.txt"
-	grid = read_grid(path_grid)
-	start = [0,0]
-	end = [13,12]
-	heuristic = calc_heuristic(grid, end)
-	best_path = search(grid, heuristic, start, end)
-	print_grid(best_path)
 main()
