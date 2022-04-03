@@ -144,6 +144,7 @@ def search(grid, heuristic, init, goal):
 							#closed[x2][y2] = 1				# Sinaliza que o no ja foi expandido
 							closed[x][y] = 1
 							action[x][y] = i				# Sinaliza qual foi a acao tomada na posicao
+							print("pare aqui")
 	
 
 	# delta = [[-1, 0], #Cima
@@ -154,27 +155,30 @@ def search(grid, heuristic, init, goal):
 	# x = 0
 	# y = 0
 	x = init[0]
-	# y = init[1]
+	y = init[1]
 
-	# delta_name = ['^', '<', 'v', '>']
-	# path[goal[0]][goal[1]] = '*'
-	# while(x != goal[0] or y != goal[1]):
-	# 	x2 = x + delta[action[x][y]][0]
-	# 	y2 = y + delta[action[x][y]][1]
+	delta_name = ['^', '<', 'v', '>']
+	path[goal[0]][goal[1]] = '*'
+	while(x != goal[0] or y != goal[1]):
+		x2 = x + delta[action[x][y]][0]
+		y2 = y + delta[action[x][y]][1]
 
-	# 	path[x][y] = delta_name[action[x][y]]
-	# 	x = x2
-	# 	y = y2
+		path[x][y] = delta_name[action[x][y]]
+		x = x2
+		y = y2
+	
+	print_grid(action)
+	print_grid(path)
 	return expand
 
 
 
 
 def main():
-	path_grid = "grids/grid_1.txt"
+	path_grid = "grids/grid_2.txt"
 	grid = read_grid(path_grid)
 	start = [0,0]
-	end = [6,6]
+	end = [4,5]
 	heuristic = calc_heuristic(grid, end)
 	best_path = search(grid, heuristic, start, end)
 	print_grid(best_path)
