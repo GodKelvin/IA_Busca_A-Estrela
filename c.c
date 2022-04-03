@@ -69,6 +69,11 @@ void print_grid(int grid[5][6], int lin, int col)
     printf("\n");
 }
 
+void free_cell(Cell* cell)
+{
+    
+}
+
 
 int main()
 {
@@ -82,6 +87,6 @@ int main()
 
     print_grid(grid, 5, 6);
 
-    Cell* cabCell = createCell();
+    Cell* cabCell = createCell(NULL);
     return 0;
 }
