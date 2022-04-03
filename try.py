@@ -59,8 +59,8 @@ def print_grid_t(grid):
 def expande_nos(pos, lista_fechada, lista_aberta, mat, xf, yf, g, custo):
 	if pos[0] >= 0 and pos[0] < 15 and pos[1] >= 0 and pos[1] < 15 and mat[pos[0]][pos[1]] != 1:
 			if pos not in lista_fechada and pos not in lista_aberta:
-				h = abs(xf - pos[0]) + abs(yf - pos[1])
-				#h = heuristic[pos[0]][pos[1]]
+				#h = abs(xf - pos[0]) + abs(yf - pos[1])
+				h = heuristic[pos[0]][pos[1]]
 				g = g + 1
 				lista_aberta.append(pos)
 				custo.append(g+h)
@@ -73,7 +73,8 @@ def print_grid(grid):
 
 def heuristica(mat, xi, yi, xf, yf):
 	g = 0
-	h = (xf - xi) + (yf - yi)
+	#h = (xf - xi) + (yf - yi)
+	h = heuristic[xi][yi]
 	destino = [xf, yf]
 
 	# matriz que direciona os possiveis caminhos do ponto atual
@@ -117,8 +118,8 @@ def heuristica(mat, xi, yi, xf, yf):
 
 path_grid = "grids/grid_1.txt"
 grid = read_grid(path_grid)
-start = [13,13]
-end = [0,0]
+start = [0,0]
+end = [13,12]
 heuristic = calc_heuristic(grid, end)
 
 def main():	
