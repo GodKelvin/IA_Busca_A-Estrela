@@ -55,16 +55,8 @@ def print_grid_t(grid):
 
 # grid, pos_inicial e destino
 def search(grid, heuristic, init, goal):
-#def search():
 
-	#grid = read_grid()
-
-	#Definindo os pontos de partida, destino e o custo
-	# init = [0, 0]
-	# goal = [4, 5] #Ou seja, os extremos do grid
-	# print("Objetivo: ")
-	# print(goal[0], goal[1])
-	#print(len(grid) - 1, len(grid[0]) - 1)
+	#Custo de cada acao
 	cost = 1
 
 	#Definindo os movimentos do agente e a traducao dos mesmos
@@ -72,9 +64,6 @@ def search(grid, heuristic, init, goal):
 			  [0, -1], #Esquerda
 			  [1,  0], #Baixo
 			  [0,  1]] #Direita
-
-
-	############################################
 
 	#Informacao dos nos ou posicoes que foram expandidos ou nao
 	closed = [[0 for row in range(len(grid[0]))] for col in range(len(grid))]
@@ -88,14 +77,6 @@ def search(grid, heuristic, init, goal):
 
 	#Ira desenhar a tragetoria do agente
 	path = [[' ' for row in range(len(grid[0]))] for col in range(len(grid))]
-
-	#print("\nCaminho Limpo:")
-	#print_grid(path)
-
-	#heuristic = calc_heuristic()
-	# print("\nHeuristica:")
-	# print_grid(heuristic)
-	# print("\n")
 	
 	x = init[0]				#Seta a posicao inicial do agente em x
 	y = init[1] 			#Seta a posicao inicial do agente em y
@@ -126,7 +107,7 @@ def search(grid, heuristic, init, goal):
 			#ordenar o vetor open para verificar qual o proximo ponto
 			open.sort()
 
-			#Inverte e ordenacao
+			#Inverte a ordenacao
 			open.reverse()
 
 			#Recebe o valor extraido de open(melhor resultado)
@@ -162,70 +143,39 @@ def search(grid, heuristic, init, goal):
 							#ORIGINAL
 							#closed[x2][y2] = 1				# Sinaliza que o no ja foi expandido
 							closed[x][y] = 1
-							print("I:", i)
-							#input()
 							action[x][y] = i				# Sinaliza qual foi a acao tomada na posicao
-							#print("I:", i)
 	
-	# x = 0
-	# y = 0
-	x = init[0]
-	y = init[1]
-
-	print("CLOSED: ")
-	print_grid(closed)
-	
-	print("Expand:")
-	print_grid(expand)
-	print("\n")
-
-	print("DELTA: ")
-	print_grid(delta)
-
-	print("\nACTION: ")
-	print_grid_t(action)
-	print("\n")
 
 	# delta = [[-1, 0], #Cima
 	# 		  [0, -1], #Esquerda
 	# 		  [1,  0], #Baixo
 	# 		  [0,  1]] #Direita
 
-	delta_name = ['^', '<', 'v', '>']
-	path[goal[0]][goal[1]] = '*'
-	while(x != goal[0] or y != goal[1]):
-		print(x, y, action[x][y])
-		x2 = x + delta[action[x][y]][0]
-		y2 = y + delta[action[x][y]][1]
+	# x = 0
+	# y = 0
+	x = init[0]
+	# y = init[1]
 
-		path[x][y] = delta_name[action[x][y]]
-		x = x2
-		y = y2
-		print_grid(path)
+	# delta_name = ['^', '<', 'v', '>']
+	# path[goal[0]][goal[1]] = '*'
+	# while(x != goal[0] or y != goal[1]):
+	# 	x2 = x + delta[action[x][y]][0]
+	# 	y2 = y + delta[action[x][y]][1]
 
-	
-
-	print_grid(path)
-	#return path
+	# 	path[x][y] = delta_name[action[x][y]]
+	# 	x = x2
+	# 	y = y2
 	return expand
 
 
 
 
 def main():
-	path_grid = "grids/grid_2.txt"
+	path_grid = "grids/grid_1.txt"
 	grid = read_grid(path_grid)
-	print("GRID:")
-	print_grid(grid)
-	start = [4,5]
-	end = [0,5]
+	start = [0,0]
+	end = [6,6]
 	heuristic = calc_heuristic(grid, end)
-	print_grid(heuristic)
-	input()
 	best_path = search(grid, heuristic, start, end)
-
-	
-	#print_grid(heuristic)
-	#print_grid(best_path)
-	#print_grid(path)
+	print_grid(best_path)
 main()
