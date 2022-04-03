@@ -46,6 +46,13 @@ def print_grid(grid):
 	for line in grid:
 		print(line)
 	print("\n")
+
+def print_grid_t(grid):
+	for i in range(len(grid)):
+		for j in range(len(grid[0])):
+			print("%d\t " %grid[i][j], end="")
+		print("\n")
+
 # grid, pos_inicial e destino
 def search(grid, heuristic, init, goal):
 #def search():
@@ -82,13 +89,13 @@ def search(grid, heuristic, init, goal):
 	#Ira desenhar a tragetoria do agente
 	path = [[' ' for row in range(len(grid[0]))] for col in range(len(grid))]
 
-	print("\nCaminho Limpo:")
-	print_grid(path)
+	#print("\nCaminho Limpo:")
+	#print_grid(path)
 
 	#heuristic = calc_heuristic()
-	print("\nHeuristica:")
-	print_grid(heuristic)
-	print("\n")
+	# print("\nHeuristica:")
+	# print_grid(heuristic)
+	# print("\n")
 	
 	x = init[0]				#Seta a posicao inicial do agente em x
 	y = init[1] 			#Seta a posicao inicial do agente em y
@@ -153,8 +160,10 @@ def search(grid, heuristic, init, goal):
 							f2 = g2 + heuristic[x2][y2]		#'f' recebe novo custo da operacao
 							open.append([f2, g2, x2, y2])	# Salva os novos valores calculados
 							#ORIGINAL
-							closed[x2][y2] = 1				# Sinaliza que o no ja foi expandido
-							#closed[x][y] = 1
+							#closed[x2][y2] = 1				# Sinaliza que o no ja foi expandido
+							closed[x][y] = 1
+							print("I:", i)
+							#input()
 							action[x][y] = i				# Sinaliza qual foi a acao tomada na posicao
 							#print("I:", i)
 	
@@ -174,7 +183,7 @@ def search(grid, heuristic, init, goal):
 	print_grid(delta)
 
 	print("\nACTION: ")
-	print_grid(action)
+	print_grid_t(action)
 	print("\n")
 
 	# delta = [[-1, 0], #Cima
@@ -197,7 +206,6 @@ def search(grid, heuristic, init, goal):
 	
 
 	print_grid(path)
-	print("OPA")
 	#return path
 	return expand
 
@@ -207,12 +215,16 @@ def search(grid, heuristic, init, goal):
 def main():
 	path_grid = "grids/grid_2.txt"
 	grid = read_grid(path_grid)
-	start = [0,0]
-	end = [0,2]
+	print("GRID:")
+	print_grid(grid)
+	start = [4,5]
+	end = [0,5]
 	heuristic = calc_heuristic(grid, end)
+	print_grid(heuristic)
+	input()
 	best_path = search(grid, heuristic, start, end)
 
-	#print_grid(grid)
+	
 	#print_grid(heuristic)
 	#print_grid(best_path)
 	#print_grid(path)
