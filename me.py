@@ -75,8 +75,8 @@ def search(grid, heuristic, start, end):
 
     #Informo que ja trabalhei com a minha posicao inicial
     lista_fechada[start[0]][start[1]] = 1
-
-    bkp_cell = [[custo_cell, custo_start, start[0], start[0]]]
+    
+    bkp_cell = [[custo_cell, custo_start, start]]
 
     #flags
     achou = False
