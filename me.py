@@ -54,21 +54,37 @@ def print_grid_t(grid):
 		print("\n")
     
 
-def search(grid, heuristic, start, end, custo):
+def search(grid, heuristic, start, end):
     lista_aberta = []
     lista_fechada = []
 
+
     #Contagem de nos expandidos
-    count = 0
+    custo_start = 0
 
     #inicilizando as listas
     for i in range(len(grid)):
-        for j in range(len(grid[i])):
-            lista_aberta[i][j] = 0
-            lista_fechada[i][j] = 0
-    
+        linha = []
+        for j in range(len(grid[0])):
+            linha.append(0)
+        lista_aberta.append(linha)
+        lista_fechada.append(linha)    
+
+    #Soma da  heuristica + o custa inicial da cell
+    custo_cell = heuristic[start[0]][start[1]] + custo_start
+
     #Informo que ja trabalhei com a minha posicao inicial
     lista_fechada[start[0]][start[1]] = 1
+
+    bkp_cell = [[custo_cell, custo_start, start[0], start[0]]]
+
+    #flags
+    achou = False
+    expandir = True
+
+    return 0
+
+    
 
     
 
@@ -81,6 +97,7 @@ def main():
     end = [4,5]
     heuristc = calc_heuristic(grid, end)
     print_grid(heuristc)
+    best_path = search(grid, heuristc, start, end)
 
 
 main()

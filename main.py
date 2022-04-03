@@ -112,6 +112,7 @@ def search(grid, heuristic, init, goal):
 
 			#Recebe o valor extraido de open(melhor resultado)
 			next = open.pop()
+
 			f = next[0]
 			g = next[1]
 			x = next[2]
@@ -169,6 +170,7 @@ def search(grid, heuristic, init, goal):
 	
 	print_grid(action)
 	print_grid(path)
+	print(expand)
 	return expand
 
 
