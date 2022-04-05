@@ -39,7 +39,7 @@ def return_path(current_node):
     return path[::-1]  # Return reversed path
 
 
-def astar(maze, start, end):
+def astar(maze, heuristic, start, end):
     """
     Returns a list of tuples as a path from the given start to the given end in the given maze
     :param maze:
@@ -105,7 +105,8 @@ def astar(maze, start, end):
 
             # Create the f, g, and h values
             child.g = current_node.g + 1
-            child.h = ((child.position[0] - end_node.position[0]) ** 2) + ((child.position[1] - end_node.position[1]) ** 2)
+            #child.h = ((child.position[0] - end_node.position[0]) ** 2) + ((child.position[1] - end_node.position[1]) ** 2)
+            child.h = heuristic[child.position[0]][child.position[1]]
             child.f = child.g + child.h
 
             # Child is already in the open list
@@ -168,12 +169,38 @@ def print_path(grid, path, start, end):
 
     print_grid(grid_path)
 
+#Baseado na distancia de mannhatan
+#Formula: |x1 - x2| + |y1 - y2|
+#Ou para N dimensoes: SUM(1~N)|pi - qi|
+def get_distance(p, q):
+	distance = 0
+	for p_i, q_i in zip(p, q):
+		distance += abs(p_i - q_i)
+	
+	return distance
+
+#Recebe o grid o objetivo
+#Calcula a distancia de todos os pontos ate o objetivo
+#Retorna a matriz com as heuristicas
+def calc_heuristic(grid, end):
+	heuristic = []
+	for i in range(len(grid)):
+		j = 0
+		new_line = []
+		for j in range(len(grid[i])):
+			new_value = get_distance([i,j], end)
+			new_line.append(new_value)
+		heuristic.append(new_line)
+
+	return heuristic
+
 def main():
     path_grid = "grids/grid_1.txt"
     grid = read_grid(path_grid)
     start = (0, 0)
     end = (len(grid) -1, len(grid[0]) - 1)
-    path = astar(grid, start, end)
+    heuristic = calc_heuristic(grid, end)
+    path = astar(grid, heuristic, start, end)
 
     print_grid(grid)
     print_path(grid, path, start, end)
