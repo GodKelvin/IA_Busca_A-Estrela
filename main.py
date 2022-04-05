@@ -138,28 +138,43 @@ def print_grid(grid):
 		print(line)
 	print("\n")
 
-#def print_path(grid, start, end):
-    
+def print_path(grid, path, start, end):
+    grid_path = []
+
+    #Criando o grid_path vazio
+    for i in range(len(grid)):
+        line = []
+        for j in range(len(grid[i])):
+            if(grid[i][j] == 0):
+                #Caminho livre
+                line.append(' ')
+            else:
+                #Obstaculo
+                line.append('#')
+        grid_path.append(line)
+
+    # '@' = Inicio
+    # 'x' = Fim
+    grid_path[start[0]][start[1]] = '@'
+    grid_path[end[0]][end[1]] = 'x'
+
+    for coord in path:
+        grid_path[coord[0]][coord[1]] = '*'
+
+
+    print_grid(grid_path)
 
 def main():
-    # grid = [[0, 1, 0, 0, 0, 0],
-    #         [0, 1, 0, 0, 0, 0],
-    #         [0, 1, 0, 0, 0, 0],
-    #         [0, 1, 0, 0, 0, 0],
-    #         [0, 0, 0, 1, 0, 0]]
-    path_grid = "grids/grid_1.txt"
+    path_grid = "grids/grid_2.txt"
     grid = read_grid(path_grid)
-    # start = [0,0]
-    # end = [4,5]
-    
     start = (0, 0)
     end = (len(grid) -1, len(grid[0]) - 1)
 
     path = astar(grid, start, end)
 
-    for coord in path:
-        grid[coord[0]][coord[1]] = 9
+    # for coord in path:
+    #     grid[coord[0]][coord[1]] = 9
     
     print_grid(grid)
-
+    print_path(grid, path, start, end)
 main()
