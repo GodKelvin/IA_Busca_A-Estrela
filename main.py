@@ -158,23 +158,23 @@ def print_path(grid, path, start, end):
     grid_path[start[0]][start[1]] = '@'
     grid_path[end[0]][end[1]] = 'x'
 
+    #Apagando as primeiras e ultimas posicoes do path,
+    #visto que ja foram computadas no grid_path
+    del path[0]
+    del path[len(path) -1]
     for coord in path:
-        grid_path[coord[0]][coord[1]] = '*'
+        grid_path[coord[0]][coord[1]] = '$'
 
 
     print_grid(grid_path)
 
 def main():
-    path_grid = "grids/grid_2.txt"
+    path_grid = "grids/grid_1.txt"
     grid = read_grid(path_grid)
     start = (0, 0)
     end = (len(grid) -1, len(grid[0]) - 1)
-
     path = astar(grid, start, end)
 
-    # for coord in path:
-    #     grid[coord[0]][coord[1]] = 9
-    
     print_grid(grid)
     print_path(grid, path, start, end)
 main()
