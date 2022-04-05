@@ -142,8 +142,8 @@ def search(grid, heuristic, init, goal):
 							f2 = g2 + heuristic[x2][y2]		#'f' recebe novo custo da operacao
 							open.append([f2, g2, x2, y2])	# Salva os novos valores calculados
 							#ORIGINAL
-							#closed[x2][y2] = 1				# Sinaliza que o no ja foi expandido
-							closed[x][y] = 1
+							closed[x2][y2] = 1				# Sinaliza que o no ja foi expandido
+							#closed[x][y] = 1
 							action[x][y] = i				# Sinaliza qual foi a acao tomada na posicao
 	
 	
@@ -151,9 +151,7 @@ def search(grid, heuristic, init, goal):
 	# 		  [0, -1], #Esquerda
 	# 		  [1,  0], #Baixo
 	# 		  [0,  1]] #Direita
-
-	# x = 0
-	# y = 0
+	
 	x = init[0]
 	y = init[1]
 
@@ -166,12 +164,7 @@ def search(grid, heuristic, init, goal):
 		path[x][y] = delta_name[action[x][y]]
 		x = x2
 		y = y2
-	
-	print_grid(action)
-	print_grid(path)
-	print(expand)
-	print_grid(action)
-	print_grid_t(action)
+
 	return expand
 
 
@@ -180,9 +173,9 @@ def search(grid, heuristic, init, goal):
 def main():
 	path_grid = "grids/grid_2.txt"
 	grid = read_grid(path_grid)
-	start = [4,5]
-	end = [0,0]
+	start = [0,0]
+	end = [4,5]
 	heuristic = calc_heuristic(grid, end)
 	best_path = search(grid, heuristic, start, end)
-	#print_grid(best_path)
+	print_grid(best_path)
 main()
