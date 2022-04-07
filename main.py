@@ -4,18 +4,23 @@ from warnings import warn
 import heapq
 
 class Node:
-    """
-    A node class for A* Pathfinding
-    """
-
+    
+    #Recebe como argumento o no parente e a posicao
+    #O no parente eh necessario para "voltar" ao inicio
     def __init__(self, parent=None, position=None):
         self.parent = parent
         self.position = position
 
+        #Valores iniciais de G, H e F,
+        #sendo:
+            # f = Custo total do noh
+            # g = Distancia do noh atual ate o noh inicial
+            # h = distancia do noh atual ate o noh final
         self.g = 0
         self.h = 0
         self.f = 0
 
+    #
     def __eq__(self, other):
         return self.position == other.position
     
@@ -39,33 +44,33 @@ def return_path(current_node):
     return path[::-1]  # Return reversed path
 
 
+#Recebe como argumento:
+    #Grid de caminho
+    #Grid da heuristica de cada posicao no grid de caminhos
+    #Posicao inicial e final
 def astar(maze, heuristic, start, end):
-    """
-    Returns a list of tuples as a path from the given start to the given end in the given maze
-    :param maze:
-    :param start:
-    :param end:
-    :return:
-    """
 
-    # Create start and end node
+    #Cria o no inicial e final
     start_node = Node(None, start)
     start_node.g = start_node.h = start_node.f = 0
     end_node = Node(None, end)
     end_node.g = end_node.h = end_node.f = 0
 
-    # Initialize both open and closed list
+    #Iniciando as listas abertas e fechadas
     open_list = []
     closed_list = []
 
-    # Heapify the open_list and Add the start node
+    #Iniciando a pilha e colocando o no inicial
     heapq.heapify(open_list) 
     heapq.heappush(open_list, start_node)
+	
+    # matriz que direciona os possiveis caminhos do ponto atual
+    move = ((0, -1), #Esquerda
+                        (0, 1),  #Direita
+                        (-1, 0), #Cima
+                        (1, 0))  #Baixo
 
-    # what squares do we search
-    adjacent_squares = ((0, -1), (0, 1), (-1, 0), (1, 0),)
-
-    # Loop until you find the end
+    #Enquanto tiver nos que nao foram verificados, procure!
     while len(open_list) > 0:   
         # Get the current node
         current_node = heapq.heappop(open_list)
@@ -78,7 +83,7 @@ def astar(maze, heuristic, start, end):
         # Generate children
         children = []
         
-        for new_position in adjacent_squares: # Adjacent squares
+        for new_position in move: # Adjacent squares
 
             # Get node position
             node_position = (current_node.position[0] + new_position[0], current_node.position[1] + new_position[1])
@@ -164,7 +169,7 @@ def print_path(grid, path, start, end):
     del path[0]
     del path[len(path) -1]
     for coord in path:
-        grid_path[coord[0]][coord[1]] = '$'
+        grid_path[coord[0]][coord[1]] = '*'
 
 
     print_grid(grid_path)
@@ -197,8 +202,8 @@ def calc_heuristic(grid, end):
 def main():
     path_grid = "grids/grid_1.txt"
     grid = read_grid(path_grid)
-    start = (0, 0)
-    end = (len(grid) -1, len(grid[0]) - 1)
+    start = (13, 10)
+    end = (0, 14)
     heuristic = calc_heuristic(grid, end)
     path = astar(grid, heuristic, start, end)
 
