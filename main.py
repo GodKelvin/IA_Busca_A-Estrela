@@ -18,11 +18,15 @@ class Node:
         self.h = 0
         self.f = 0
 
-    #Verificando se os nohs tem a mesma posicao
+    #Os metodos dessa classe (Noh) foram criados conforme tutorial:
+    #https://www.tutorialspoint.com/How-to-implement-Python-lt-gt-custom-overloaded-operators
+    #Para fins de comparacao com o mesmo tipo de classe
+    
+    #Para verificar se os nohs tem a mesma posicao
     def __eq__(self, other):
         return self.position == other.position
 
-    #Verificando se os valores sao menores ou maiores, com base no custo total
+    #Para verificar se os valores sao menores ou maiores, com base no custo total de cada noh
     def __lt__(self, other):
       return self.f < other.f
     
@@ -63,9 +67,9 @@ def a_estrela(maze, heuristic, start, end):
 	
     # matriz que direciona os possiveis caminhos do ponto atual
     move = ((0, -1), #Esquerda
-                        (0, 1),  #Direita
-                        (-1, 0), #Cima
-                        (1, 0))  #Baixo
+            (0, 1),  #Direita
+            (-1, 0), #Cima
+            (1, 0))  #Baixo
 
     #Enquanto tiver nos que nao foram verificados, procure!
     while len(open_list) > 0:   
