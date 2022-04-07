@@ -48,7 +48,7 @@ def return_path(current_node):
     #Grid de caminho
     #Grid da heuristica de cada posicao no grid de caminhos
     #Posicao inicial e final
-def astar(maze, heuristic, start, end):
+def a_estrela(maze, heuristic, start, end):
 
     #Cria o no inicial e final
     start_node = Node(None, start)
@@ -199,14 +199,36 @@ def calc_heuristic(grid, end):
 
 	return heuristic
 
+
+#Responsavel por chamar os casos propostos no trabalho,
+#e plotar o mapa do caminho, junto com as coordenadas
+def run(grid, start, end):
+    heuristic = calc_heuristic(grid, end)
+    path = a_estrela(grid, heuristic, start, end)
+
+    print("Caminho encontrado: ")
+    print(path)
+    print("\n")
+    print("Caminho desenhado:")
+    print_path(grid, path, start, end)
+
 def main():
     path_grid = "grids/grid_1.txt"
     grid = read_grid(path_grid)
-    start = (13, 10)
-    end = (0, 14)
-    heuristic = calc_heuristic(grid, end)
-    path = astar(grid, heuristic, start, end)
-
+    print("Labirinto:")
     print_grid(grid)
-    print_path(grid, path, start, end)
+    print("\n")
+    #Caso 1
+    print("Caso 1: ")
+    run(grid, (0,0), (13,12))
+
+    #Caso 2
+    print("Caso 2: ")
+    run(grid, (13,12), (0,0))
+
+    #Caso 3
+    print("Input do Usuario:")
+    
+
+    
 main()
