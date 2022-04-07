@@ -1,5 +1,6 @@
 import heapq
 import sys
+import time
 
 class Node:
     #Recebe como argumento o no parente e a posicao
@@ -17,15 +18,11 @@ class Node:
         self.h = 0
         self.f = 0
 
-    #
+    #Verificando se os nohs tem a mesma posicao
     def __eq__(self, other):
         return self.position == other.position
-    
-    def __repr__(self):
-      return f"{self.position} - g: {self.g} h: {self.h} f: {self.f}"
 
-    #Verificando se os valores sao menores ou maiores, para
-    #colocar na posicao correta da fila, com base no custo total
+    #Verificando se os valores sao menores ou maiores, com base no custo total
     def __lt__(self, other):
       return self.f < other.f
     
@@ -50,7 +47,6 @@ def return_path(current_node):
     #Grid da heuristica de cada posicao no grid de caminhos
     #Posicao inicial e final
 def a_estrela(maze, heuristic, start, end):
-
     #Cria o no inicial e final
     start_node = Node(None, start)
     start_node.g = start_node.h = start_node.f = 0
@@ -220,7 +216,11 @@ def calc_heuristic(grid, end):
 #e plotar o mapa do caminho, junto com as coordenadas
 def run(grid, start, end):
     heuristic = calc_heuristic(grid, end)
+    inicio = time.time()
     path = a_estrela(grid, heuristic, start, end)
+    total = time.time() - inicio
+
+    print("Tempo total: %.5f segundos" %total)
     if(path != None):
         print("Caminho encontrado: ")
         print(path)
@@ -231,6 +231,8 @@ def run(grid, start, end):
         print("Nem um caminho encontrado / Caminho invalido")
 
 def main():
+
+    #Captura os valores do sistema
     path_grid = sys.argv[1]
     start_value = sys.argv[2].split(',')
     end_value = sys.argv[3].split(',')
