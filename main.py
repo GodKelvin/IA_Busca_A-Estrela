@@ -1,5 +1,12 @@
-import heapq
+#Author: Kelvin Lehrback
+
+#Para fins de prioridade do Noh, utilizei o heapq, cujo tutorial vi em:
+import heapq ##https://www.geeksforgeeks.org/heap-queue-or-heapq-in-python/
+
+#Para pegar os argumentos via linha de comando
 import sys
+
+#Para calcular o tempo de execucao
 import time
 
 class Node:
