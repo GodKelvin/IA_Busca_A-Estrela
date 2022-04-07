@@ -226,15 +226,15 @@ def main():
     print_grid(grid)
     print("\n")
     #Caso 1
-    print("Caso 1: ")
+    print("Caso 1: (0,0), 13,12)")
     run(grid, (0,0), (13,12))
 
     #Caso 2
-    print("Caso 2: ")
+    print("Caso 2: (13,12), (0,0)")
     run(grid, (13,12), (0,0))
 
     #Caso 3
-    print("Input do Usuario:")
+    print("Input do Usuario: ", start, end)
     run(grid, start, end)
 
     
