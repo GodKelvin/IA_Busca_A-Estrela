@@ -25,21 +25,25 @@ class Node:
     def __repr__(self):
       return f"{self.position} - g: {self.g} h: {self.h} f: {self.f}"
 
-    # defining less than for purposes of heap queue
+    #Verificando se os valores sao menores ou maiores, para
+    #colocar na posicao correta da fila, com base no custo total
     def __lt__(self, other):
       return self.f < other.f
     
-    # defining greater than for purposes of heap queue
     def __gt__(self, other):
       return self.f > other.f
 
+#Retornar o caminho correto dado um noh
+#Sempre verificando qual era o seu parente
 def return_path(current_node):
     path = []
     current = current_node
     while current is not None:
         path.append(current.position)
         current = current.parent
-    return path[::-1]  # Return reversed path
+    
+    #Retorna o caminho reverso (sort.reverse)
+    return path[::-1]
 
 
 #Recebe como argumento:
@@ -70,58 +74,63 @@ def a_estrela(maze, heuristic, start, end):
 
     #Enquanto tiver nos que nao foram verificados, procure!
     while len(open_list) > 0:   
-        # Get the current node
+        #Captura o menor noh para fins de verificacao
         current_node = heapq.heappop(open_list)
         closed_list.append(current_node)
 
-        # Found the goal
+        #Verifica se chegou ao fim
         if current_node == end_node:
             return return_path(current_node)
 
-        # Generate children
+        #Caso contrario, cria uma lista para armazenar as novas posicoes
         children = []
         
-        for new_position in move: # Adjacent squares
+        #Para cada posicao que o Noh pode se mover (Cima, baixo, direita cima)
+        for new_position in move:
 
-            # Get node position
+            #Calcula qual sera a nova posicao do noh com base no movimento
             node_position = (current_node.position[0] + new_position[0], current_node.position[1] + new_position[1])
 
-            # Make sure within range
+            #Verifica se esta dentro dos limites do grid
             if node_position[0] > (len(maze) - 1) or node_position[0] < 0 or node_position[1] > (len(maze[len(maze)-1]) -1) or node_position[1] < 0:
                 continue
 
-            # Make sure walkable terrain
+            #Verifica se nao eh um obstaculo
             if maze[node_position[0]][node_position[1]] != 0:
                 continue
 
-            # Create new node
+            #Cria um novo noh, com base nessa nova posicao
             new_node = Node(current_node, node_position)
 
-            # Append
+            #Salva essa posicao na lista de nos validos
             children.append(new_node)
 
-        # Loop through children
+        #Verifico a lista de nohs filhos
         for child in children:
-            # Child is on the closed list
+            #Se o noh filho tiver caminho para ir
             if len([closed_child for closed_child in closed_list if closed_child == child]) > 0:
                 continue
 
-            # Create the f, g, and h values
+            #Calculo os valores de 'g', 'h' e 'f'
             child.g = current_node.g + 1
-            #child.h = ((child.position[0] - end_node.position[0]) ** 2) + ((child.position[1] - end_node.position[1]) ** 2)
+
+            #Valor de 'h' com base na distancia de manhattan
             child.h = heuristic[child.position[0]][child.position[1]]
             child.f = child.g + child.h
 
-            # Child is already in the open list
+            #se o noh filho ja estiver na lista aberta, 
             if len([open_node for open_node in open_list if child.position == open_node.position and child.g > open_node.g]) > 0:
                 continue
 
-            # Add the child to the open list
+            #Coloca essa lista de nohs no topo da fila
             heapq.heappush(open_list, child)
         
     #Nao encontrou nem um caminho
     return None
 
+
+#Recebe o caminho do arquivo do grid
+#Retorna uma matriz com base nos valores do grid
 def read_grid(path_file):
 	grid = []
 	with open(path_file) as file:
@@ -137,11 +146,21 @@ def read_grid(path_file):
 
 	return grid
 
+#Mostra na tela de forma limpa uma matriz
 def print_grid(grid):
 	for line in grid:
 		print(line)
 	print("\n")
 
+
+#Dado o grid, uma lista de coordenadas (caminho),
+#posicao inicial e posicao final:
+#Mostra na tela de forma "bonita" o caminho realizado ->
+#Sendo  @ == posicao inicial
+#       x == posinal final
+#      ' '== caminho livre
+#       # == obstaculo
+#       * == trajeto
 def print_path(grid, path, start, end):
     grid_path = []
 
@@ -174,7 +193,7 @@ def print_path(grid, path, start, end):
 
 #Baseado na distancia de mannhatan
 #Formula: |x1 - x2| + |y1 - y2|
-#Ou para N dimensoes: SUM(1~N)|pi - qi|
+#Ou para N dimensoes: SUM(i=1~~N)|pi - qi|
 def get_distance(p, q):
 	distance = 0
 	for p_i, q_i in zip(p, q):
@@ -213,7 +232,6 @@ def run(grid, start, end):
         print("Nem um caminho encontrado / Caminho invalido")
 
 def main():
-    #path_grid = "grids/grid_1.txt"
     path_grid = sys.argv[1]
     start_value = sys.argv[2].split(',')
     end_value = sys.argv[3].split(',')
