@@ -2,7 +2,6 @@ import heapq
 import sys
 
 class Node:
-    
     #Recebe como argumento o no parente e a posicao
     #O no parente eh necessario para "voltar" ao inicio
     def __init__(self, parent=None, position=None):
