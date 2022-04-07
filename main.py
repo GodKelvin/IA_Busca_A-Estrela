@@ -1,7 +1,5 @@
-# Credit for this: Nicholas Swift
-# as found at https://medium.com/@nicholas.w.swift/easy-a-star-pathfinding-7e6689c7f7b2
-from warnings import warn
 import heapq
+import sys
 
 class Node:
     
@@ -120,8 +118,8 @@ def a_estrela(maze, heuristic, start, end):
 
             # Add the child to the open list
             heapq.heappush(open_list, child)
-
-    warn("Couldn't get a path to destination")
+        
+    #Nao encontrou nem um caminho
     return None
 
 def read_grid(path_file):
@@ -205,15 +203,24 @@ def calc_heuristic(grid, end):
 def run(grid, start, end):
     heuristic = calc_heuristic(grid, end)
     path = a_estrela(grid, heuristic, start, end)
-
-    print("Caminho encontrado: ")
-    print(path)
-    print("\n")
-    print("Caminho desenhado:")
-    print_path(grid, path, start, end)
+    if(path != None):
+        print("Caminho encontrado: ")
+        print(path)
+        print("\n")
+        print("Caminho desenhado:")
+        print_path(grid, path, start, end)
+    else:
+        print("Nem um caminho encontrado / Caminho invalido")
 
 def main():
-    path_grid = "grids/grid_1.txt"
+    #path_grid = "grids/grid_1.txt"
+    path_grid = sys.argv[1]
+    start_value = sys.argv[2].split(',')
+    end_value = sys.argv[3].split(',')
+
+    start = (int(start_value[0]), int(start_value[1]))
+    end = (int(end_value[0]), int(end_value[1]))
+
     grid = read_grid(path_grid)
     print("Labirinto:")
     print_grid(grid)
@@ -228,6 +235,8 @@ def main():
 
     #Caso 3
     print("Input do Usuario:")
+    run(grid, start, end)
+
     
 
     
