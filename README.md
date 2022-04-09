@@ -15,5 +15,5 @@ Atividade avaliativa realizada durante a disciplina de Inteligência Artifical(2
 <br><br>
 Ou seja, chamando o código principal .py interpretado pelo python 3, o caminho do arquivo do grid, coordenada inicial e coordenada final (destino.)
 
-### Saida
+### Saída
 A saida se dará pelo terminal / cmd de onde o código foi executado, mostrando na tela valores como: Tempo de execução, grid lido, caminho percorrido e as respectivas coordenadas.
