@@ -11,9 +11,13 @@ Atividade avaliativa realizada durante a disciplina de Inteligência Artifical(2
 ## Execução do código:
 
 ### Entrada
-```python3 main.py caminho_grid.txt 0,0 14,12``` 
+```python3 lib/main.py grids/grid_1.txt 0,0 13,12``` 
 <br><br>
-Ou seja, chamando o código principal .py interpretado pelo python 3, o caminho do arquivo do grid, coordenada inicial e coordenada final (destino.)
+Ou seja, chamando o código principal .py interpretado pelo python 3, o caminho do arquivo do grid, coordenada inicial e coordenada final (destino). 
+
+Lembrando que os arquivos .py estão dentro da pasta lib. Disponibilizei também os grids de teste, que se encontram dentro da pasta grids.
 
 ### Saída
 A saida se dará pelo terminal / cmd de onde o código foi executado, mostrando na tela valores como: Tempo de execução, grid lido, caminho percorrido e as respectivas coordenadas.
+
+## O relatório se encontra dentro da pasta docs.
