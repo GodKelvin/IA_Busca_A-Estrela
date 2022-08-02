@@ -20,4 +20,5 @@ Lembrando que os arquivos .py estão dentro da pasta lib. Disponibilizei também
 ### Saída
 A saida se dará pelo terminal / cmd de onde o código foi executado, mostrando na tela valores como: Tempo de execução, grid lido, caminho percorrido e as respectivas coordenadas.
 
-## O relatório se encontra dentro da pasta docs.
+## Nota
+De 0 a 100, a mesma recebeu nota 100.
